@@ -13,7 +13,7 @@ var TITLES = [
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var TIMES = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var DESCRIPTION = [
+var DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Aliquet eget sit amet tellus cras adipiscing. Luctus venenatis lectus magna fringilla urna porttitor rhoncus dolor.',
   'Senectus et netus et malesuada fames. Risus commodo viverra maecenas accumsan lacus vel. Eleifend quam adipiscing vitae proin sagittis nisl rhoncus. Mi ipsum faucibus vitae aliquet nec ullamcorper. Morbi tincidunt ornare massa eget. Sit amet commodo nulla facilisi nullam vehicula ipsum a.',
   'Et netus et malesuada fames ac. Lectus nulla at volutpat diam ut. Viverra accumsan in nisl nisi scelerisque eu. Massa enim nec dui nunc mattis enim ut.',
@@ -34,6 +34,7 @@ var MAX_Y = 630;
 
 var userMapElement = document.querySelector('.map');
 var mapPinsTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+var pinListElement = document.querySelector('.map__pins');
 
 var getRandomInt = function (max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -50,10 +51,10 @@ var getRandomData = function (arr) {
   return arr[position];
 };
 
-var getRandomMassive = function (arr) {
+var getRandomArray = function (arr) {
   var randomArr = [];
-
-  for (var i = 0; i < getRandomInt(getRandomIntInclusive(1, 10)); i++) {
+  var arrayLength = getRandomInt(getRandomIntInclusive(1, 10));
+  for (var i = 0; i < arrayLength; i++) {
     randomArr.push(arr[i]);
   }
 
@@ -66,7 +67,7 @@ var generateRandomAdv = function (number) {
   for (var i = 0; i < number; i++) {
     advList.push({
       author: {
-        avatar: 'img/avatars/user0' + getRandomIntInclusive(1, 6) + '.png'
+        avatar: 'img/avatars/user0' + i + '.png'
       },
       offer: {
         title: getRandomData(TITLES),
@@ -76,9 +77,9 @@ var generateRandomAdv = function (number) {
         guests: getRandomIntInclusive(1, MAX_GUEST),
         checkin: getRandomData(TIMES),
         checkout: getRandomData(TIMES),
-        features: getRandomMassive(FEATURES),
-        description: getRandomData(DESCRIPTION),
-        photos: getRandomMassive(PHOTOS)
+        features: getRandomArray(FEATURES),
+        description: getRandomData(DESCRIPTIONS),
+        photos: getRandomArray(PHOTOS)
       },
       location: {
         x: getRandomIntInclusive(1, userMapElement.offsetWidth),
@@ -105,8 +106,7 @@ var renderPin = function (advData) {
   return pinElement;
 };
 
-var addRenderPins = function (advList) {
-  var pinListElement = document.querySelector('.map__pins');
+var renderPins = function (advList) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < advList.length; i++) {
@@ -120,7 +120,7 @@ var addRenderPins = function (advList) {
 var init = function () {
   showMapDialog();
   var advArray = generateRandomAdv(NUMBER_OF_ADV);
-  addRenderPins(advArray);
+  renderPins(advArray);
 };
 
 init();
