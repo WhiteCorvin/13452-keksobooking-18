@@ -67,7 +67,7 @@ var generateRandomAdv = function (number) {
   for (var i = 0; i < number; i++) {
     advList.push({
       author: {
-        avatar: 'img/avatars/user0' + i + '.png'
+        avatar: 'img/avatars/user0' + (i + 1) + '.png'
       },
       offer: {
         title: getRandomData(TITLES),
