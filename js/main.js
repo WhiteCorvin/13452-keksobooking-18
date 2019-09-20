@@ -67,23 +67,23 @@ var getRandomArray = function (arr) {
   var arrayLength = getRandomIntInclusive(1, arr.length);
 
   for (var i = 0; i < arrayLength; i++) {
-      randomArr.push(arr[i]);
+    randomArr.push(arr[i]);
   }
 
   return randomArr;
 };
 
-var matchValues = function (names, value) {
-  var ansv = '';
+var getValueByKey = function (names, value) {
+  var result = '';
   for (var i in names) {
     if (i === value) {
-      ansv = names.i;
+      result = names[i];
     }
   }
-  return ansv;
+  return result;
 };
 
-var getFirstDigit = function (number) {
+var getLastDigit = function (number) {
   number += '';
   var numbers = [];
   numbers = number.split('');
@@ -149,7 +149,7 @@ var renderPins = function (advList) {
 
 var getCapacityText = function (rooms, guests) {
   var text = rooms;
-  var firstDigitRooms = getFirstDigit(rooms);
+  var firstDigitRooms = getLastDigit(rooms);
 
   if (firstDigitRooms === 1) {
     text += ' комната';
@@ -196,7 +196,7 @@ var renderCard = function (adv) {
 
   cardElement.querySelector('.popup__title').textContent = adv.offer.title;
   cardElement.querySelector('.popup__text--price').firstChild.nodeValue = adv.offer.price + ' ₽';
-  cardElement.querySelector('.popup__type').textContent = matchValues(TYPES_TRANSLATE, name);
+  cardElement.querySelector('.popup__type').textContent = getValueByKey(TYPES_TRANSLATE, name);
   cardElement.querySelector('.popup__text--capacity').textContent = getCapacityText(adv.offer.rooms, adv.offer.guests);
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + adv.offer.checkin + ', выезд до ' + adv.offer.checkout;
   cardElement.querySelector('.popup__description').textContent = adv.offer.description;
