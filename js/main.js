@@ -64,14 +64,10 @@ var getRandomData = function (arr) {
 
 var getRandomArray = function (arr) {
   var randomArr = [];
-  var arrayLength = getRandomInt(getRandomIntInclusive(1, 10));
+  var arrayLength = getRandomIntInclusive(1, arr.length);
 
   for (var i = 0; i < arrayLength; i++) {
-    var j = getRandomInt(arr.length - 1);
-    if (arr[i]) {
       randomArr.push(arr[i]);
-    }
-    randomArr.push(arr[j]);
   }
 
   return randomArr;
