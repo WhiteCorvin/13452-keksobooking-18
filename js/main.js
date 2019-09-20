@@ -74,21 +74,20 @@ var getRandomArray = function (arr) {
 };
 
 var getValueByKey = function (names, value) {
-  var result = '';
+
   for (var i in names) {
     if (i === value) {
-      result = names[i];
+      return names[i];
     }
   }
-  return result;
+  return '';
 };
 
 var getLastDigit = function (number) {
-  number += '';
-  var numbers = [];
-  numbers = number.split('');
-  number = numbers[numbers.length - 1];
-  return Number.parseInt(number, 10);
+  var numAsStr = number + '';
+  var numbers = numAsStr.split('');
+
+  return Number.parseInt(numbers[0], 10);
 };
 
 var generateRandomAdv = function (number) {
