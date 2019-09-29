@@ -39,13 +39,27 @@ var MAX_ROOM = 100;
 var MAX_GUEST = 10;
 var MIN_Y = 130;
 var MAX_Y = 630;
+var ENTER_KEYCODE = 13;
+
+var activeMode = false;
 
 var userMapElement = document.querySelector('.map');
 var mapPinsTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var pinListElement = document.querySelector('.map__pins');
+var pinMainElement = document.querySelector('.map__pin--main');
 
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 var filtersContainerElement = document.querySelector('.map__filters-container');
+
+var formElement = document.querySelector('.ad-form');
+var formHeaderFieldsetElement = document.querySelector('.ad-form-header');
+var formFieldsetElements = document.querySelectorAll('.ad-form__element');
+
+var formAddressInputElement = document.querySelector('[name="address"]');
+
+var roomSectionElement = document.querySelector('#room_number');
+var roomOptionElements = document.querySelector('[name="rooms"]').querySelectorAll('option');
+var capacityOptionElements = document.querySelector('[name="capacity"]').querySelectorAll('option');
 
 var getRandomInt = function (max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -87,7 +101,7 @@ var getLastDigit = function (number) {
   var numAsStr = number + '';
   var numbers = numAsStr.split('');
 
-  return Number.parseInt(numbers[0], 10);
+  return Number.parseInt(numbers[number.length - 1], 10);
 };
 
 var generateRandomAdv = function (number) {
@@ -206,16 +220,103 @@ var renderCard = function (adv) {
 
   return cardElement;
 };
+
 var addCard = function (advItem) {
   var adv = renderCard(advItem);
   userMapElement.insertBefore(adv, filtersContainerElement);
 };
 
-var init = function () {
+var doChangeDisabledElement = function (element, isDisabled) {
+  element.disabled = isDisabled;
+};
+
+var doInactiveForm = function () {
+  doChangeDisabledElement(formHeaderFieldsetElement, true);
+
+  for (var i = 0; i < formFieldsetElements.length; i++) {
+    doChangeDisabledElement(formFieldsetElements[i], true);
+  }
+
+};
+
+var onMainPinEnterPress = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    doActiveMode();
+  }
+};
+
+var doActiveMode = function () {
+  activeMode = true;
+  fillAddressInput();
+
+  doChangeDisabledElement(formHeaderFieldsetElement, false);
+
+  for (var i = 0; i < formFieldsetElements.length; i++) {
+    doChangeDisabledElement(formFieldsetElements[i], false);
+  }
+
+  formElement.classList.remove('ad-form--disabled');
+
   showMapDialog();
   var advArray = generateRandomAdv(NUMBER_OF_ADV);
   renderPins(advArray);
   addCard(advArray[0]);
+
+
+  pinMainElement.removeEventListener('mousedown', doActiveMode);
+  pinMainElement.removeEventListener('keydown', onMainPinEnterPress);
+};
+
+var addMainPinListener = function () {
+  pinMainElement.addEventListener('mousedown', doActiveMode);
+  pinMainElement.addEventListener('keydown', onMainPinEnterPress);
+};
+
+var fillAddressInput = function () {
+  var top = pinMainElement.offsetTop;
+  var leftWithWidth = pinMainElement.offsetLeft + pinMainElement.offsetWidth / 2;
+  var topWithHeight = activeMode ? (top + pinMainElement.offsetHeight) : (top + pinMainElement.offsetHeight / 2);
+
+  formAddressInputElement.value = leftWithWidth + ', ' + topWithHeight;
+};
+
+var getSelectedElementValue = function (arr) {
+
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i].selected) {
+      return arr[i].value;
+    }
+  }
+
+  return '';
+};
+
+var doGuestsValidation = function () {
+  var roomValue = Number(getSelectedElementValue(roomOptionElements));
+
+  for (var i = 0; i < capacityOptionElements.length; i++) {
+    var capacityValue = Number(capacityOptionElements[i].value);
+
+    if (roomValue >= capacityValue && roomValue !== MAX_ROOM && capacityValue !== 0) {
+      doChangeDisabledElement(capacityOptionElements[i], false);
+      capacityOptionElements[i].selected = true;
+    } else if (capacityValue === 0 && roomValue === MAX_ROOM) {
+      doChangeDisabledElement(capacityOptionElements[i], false);
+      capacityOptionElements[i].selected = true;
+    } else {
+      doChangeDisabledElement(capacityOptionElements[i], true);
+    }
+  }
+
+};
+
+var init = function () {
+  doInactiveForm(formFieldsetElements);
+  addMainPinListener();
+  fillAddressInput();
+  doGuestsValidation();
+  roomSectionElement.addEventListener('change', doGuestsValidation);
 };
 
 init();
+
