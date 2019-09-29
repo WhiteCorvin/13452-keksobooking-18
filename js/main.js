@@ -101,7 +101,7 @@ var getLastDigit = function (number) {
   var numAsStr = number + '';
   var numbers = numAsStr.split('');
 
-  return Number.parseInt(numbers[0], 10);
+  return Number.parseInt(numbers[number.length - 1], 10);
 };
 
 var generateRandomAdv = function (number) {
@@ -226,8 +226,8 @@ var addCard = function (advItem) {
   userMapElement.insertBefore(adv, filtersContainerElement);
 };
 
-var doChangeDisabledElement = function (element, bool) {
-  element.disabled = bool;
+var doChangeDisabledElement = function (element, isDisabled) {
+  element.disabled = isDisabled;
 };
 
 var doInactiveForm = function () {
@@ -274,14 +274,10 @@ var addMainPinListener = function () {
 
 var fillAddressInput = function () {
   var leftWithWidth = pinMainElement.offsetLeft + pinMainElement.offsetWidth / 2;
+  var topWithHeight = activeMode ? (top + pinMainElement.offsetHeight) : (top + pinMainElement.offsetHeight / 2);
   var top = pinMainElement.offsetTop;
 
-  if (activeMode) {
-    formAddressInputElement.value = leftWithWidth + ', ' + (top + pinMainElement.offsetHeight);
-  } else {
-    formAddressInputElement.value = leftWithWidth + ', ' + (top + pinMainElement.offsetHeight / 2);
-  }
-
+  formAddressInputElement.value = leftWithWidth + ', ' + topWithHeight;
 };
 
 var getSelectedElementValue = function (arr) {
