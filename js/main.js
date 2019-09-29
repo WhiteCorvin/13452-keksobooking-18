@@ -25,14 +25,14 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
-/*
+
 var TYPES_TRANSLATE = {
   palace: 'Дворец',
   flat: 'Квартира',
   bungalo: 'Бунгало',
   house: 'Дом'
 };
-*/
+
 var NUMBER_OF_ADV = 8;
 var MAX_MONEY = 1000000;
 var MAX_ROOM = 100;
@@ -47,10 +47,10 @@ var userMapElement = document.querySelector('.map');
 var mapPinsTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var pinListElement = document.querySelector('.map__pins');
 var pinMainElement = document.querySelector('.map__pin--main');
-/*
+
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 var filtersContainerElement = document.querySelector('.map__filters-container');
-*/
+
 var formElement = document.querySelector('.ad-form');
 var formHeaderFieldsetElement = document.querySelector('.ad-form-header');
 var formFieldsetElements = document.querySelectorAll('.ad-form__element');
@@ -86,7 +86,7 @@ var getRandomArray = function (arr) {
 
   return randomArr;
 };
-/*
+
 var getValueByKey = function (names, value) {
 
   for (var i in names) {
@@ -103,7 +103,7 @@ var getLastDigit = function (number) {
 
   return Number.parseInt(numbers[0], 10);
 };
-*/
+
 var generateRandomAdv = function (number) {
   var advList = [];
 
@@ -159,7 +159,7 @@ var renderPins = function (advList) {
 
   pinListElement.appendChild(fragment);
 };
-/*
+
 var getCapacityText = function (rooms, guests) {
   var text = rooms;
   var firstDigitRooms = getLastDigit(rooms);
@@ -225,7 +225,7 @@ var addCard = function (advItem) {
   var adv = renderCard(advItem);
   userMapElement.insertBefore(adv, filtersContainerElement);
 };
-*/
+
 var doChangeDisabledElement = function (element, bool) {
   element.disabled = bool;
 };
@@ -260,6 +260,7 @@ var doActiveMode = function () {
   showMapDialog();
   var advArray = generateRandomAdv(NUMBER_OF_ADV);
   renderPins(advArray);
+  addCard(advArray[0]);
 
 
   pinMainElement.removeEventListener('mousedown', doActiveMode);
