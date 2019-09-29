@@ -277,9 +277,9 @@ var fillAddressInput = function () {
   var top = pinMainElement.offsetTop;
 
   if (activeMode) {
-    formAddressInputElement.value = leftWithWidth + ', ' + top + pinMainElement.offsetHeight;
+    formAddressInputElement.value = leftWithWidth + ', ' + (top + pinMainElement.offsetHeight);
   } else {
-    formAddressInputElement.value = leftWithWidth + ', ' + top + pinMainElement.offsetHeight / 2;
+    formAddressInputElement.value = leftWithWidth + ', ' + (top + pinMainElement.offsetHeight / 2);
   }
 
 };
