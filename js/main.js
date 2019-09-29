@@ -273,9 +273,9 @@ var addMainPinListener = function () {
 };
 
 var fillAddressInput = function () {
+  var top = pinMainElement.offsetTop;
   var leftWithWidth = pinMainElement.offsetLeft + pinMainElement.offsetWidth / 2;
   var topWithHeight = activeMode ? (top + pinMainElement.offsetHeight) : (top + pinMainElement.offsetHeight / 2);
-  var top = pinMainElement.offsetTop;
 
   formAddressInputElement.value = leftWithWidth + ', ' + topWithHeight;
 };
