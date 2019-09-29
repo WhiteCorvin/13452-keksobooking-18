@@ -57,6 +57,7 @@ var formFieldsetElements = document.querySelectorAll('.ad-form__element');
 
 var formAddressInputElement = document.querySelector('[name="address"]');
 
+var roomSectionElement = document.querySelector('#room_number');
 var roomOptionElements = document.querySelector('[name="rooms"]').querySelectorAll('option');
 var capacityOptionElements = document.querySelector('[name="capacity"]').querySelectorAll('option');
 
@@ -309,20 +310,13 @@ var doGuestsValidation = function () {
 
 };
 
-var addRoomOptionListener = function () {
-
-  for (var i = 0; i < roomOptionElements.length; i++) {
-    roomOptionElements[i].addEventListener('mousedown', doGuestsValidation);
-  }
-
-};
-
 var init = function () {
   doInactiveForm(formFieldsetElements);
   addMainPinListener();
   fillAddressInput();
   doGuestsValidation();
-  addRoomOptionListener();
+  roomSectionElement.addEventListener('change', doGuestsValidation);
 };
 
 init();
+
