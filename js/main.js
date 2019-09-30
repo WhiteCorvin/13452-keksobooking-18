@@ -26,11 +26,23 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-var TYPES_TRANSLATE = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  bungalo: 'Бунгало',
-  house: 'Дом'
+var TYPES_OPTIONS = {
+  palace: {
+    name: 'Дворец',
+    minPrice: '10000'
+  },
+  flat: {
+    name: 'Квартира',
+    minPrice: '1000'
+  },
+  bungalo: {
+    name: 'Бунгало',
+    minPrice: '0'
+  },
+  house: {
+    name: 'Дом',
+    minPrice: '5000'
+  }
 };
 
 var NUMBER_OF_ADV = 8;
@@ -58,9 +70,21 @@ var formFieldsetElements = document.querySelectorAll('.ad-form__element');
 
 var formAddressInputElement = document.querySelector('[name="address"]');
 
-var roomSectionElement = document.querySelector('#room_number');
-var roomOptionElements = document.querySelector('[name="rooms"]').querySelectorAll('option');
+var roomSelectElement = document.querySelector('[name="rooms"]');
+var roomOptionElements = roomSelectElement.querySelectorAll('option');
 var capacityOptionElements = document.querySelector('[name="capacity"]').querySelectorAll('option');
+
+var typeSelectElement = document.querySelector('[name="type"]');
+var typeOptionElements = typeSelectElement.querySelectorAll('option');
+var priceInputElement = document.querySelector('[name="price"]');
+
+var addressInputElement = document.querySelector('[name="address"]');
+
+var timeInSelectElement = document.querySelector('[name="timein"]');
+var timeInOptionElements = timeInSelectElement.querySelectorAll('option');
+
+var timeOutSelectElement = document.querySelector('[name="timeout"]');
+var timeOutOptionElements = timeOutSelectElement.querySelectorAll('option');
 
 var getRandomInt = function (max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -153,14 +177,14 @@ var renderPin = function (advData) {
 
 var addPinClickListener = function (element, data) {
   element.addEventListener('click', function () {
-
+    var popupElement = document.querySelector('.map__card');
     if (popupElement) {
       popupElement.remove();
     }
     addCard(data);
 
-    var popupElement = document.querySelector('.map__card');
-    var popupCloseElement = document.querySelector('.popup__close');
+    popupElement = document.querySelector('.map__card');
+    var popupCloseElement = popupElement.querySelector('.popup__close');
 
     var closePopup = function () {
       popupElement.remove();
@@ -173,7 +197,6 @@ var addPinClickListener = function (element, data) {
     window.addEventListener('keydown', function (evt) {
       onElementEscPress(evt, closePopup);
     });
-
 
   });
 };
@@ -240,7 +263,7 @@ var renderCard = function (adv) {
 
   cardElement.querySelector('.popup__title').textContent = adv.offer.title;
   cardElement.querySelector('.popup__text--price').firstChild.nodeValue = adv.offer.price + ' ₽';
-  cardElement.querySelector('.popup__type').textContent = getValueByKey(TYPES_TRANSLATE, name);
+  cardElement.querySelector('.popup__type').textContent = getValueByKey(TYPES_OPTIONS, name).name;
   cardElement.querySelector('.popup__text--capacity').textContent = getCapacityText(adv.offer.rooms, adv.offer.guests);
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + adv.offer.checkin + ', выезд до ' + adv.offer.checkout;
   cardElement.querySelector('.popup__description').textContent = adv.offer.description;
@@ -317,6 +340,7 @@ var fillAddressInput = function () {
   var topWithHeight = activeMode ? (top + pinMainElement.offsetHeight) : (top + pinMainElement.offsetHeight / 2);
 
   formAddressInputElement.value = leftWithWidth + ', ' + topWithHeight;
+  formAddressInputElement.nodeValue = leftWithWidth + ', ' + topWithHeight;
 };
 
 var getSelectedElementValue = function (arr) {
@@ -349,12 +373,55 @@ var doGuestsValidation = function () {
 
 };
 
+var doMinPriceValue = function () {
+  var selectedType = getSelectedElementValue(typeOptionElements);
+  var typeValue = getValueByKey(TYPES_OPTIONS, selectedType).minPrice;
+  priceInputElement.min = typeValue;
+  priceInputElement.placeholder = typeValue;
+};
+
+var doChangeTimeOut = function () {
+  var selectedValue = getSelectedElementValue(timeOutOptionElements);
+
+  for (var i = 0; i < timeInOptionElements.length; i++) {
+    if (selectedValue === timeInOptionElements[i].value) {
+      timeInOptionElements[i].selected = true;
+      return;
+    }
+  }
+
+};
+
+var doChangeTimeIn = function () {
+  var selectedValue = getSelectedElementValue(timeInOptionElements);
+
+  for (var i = 0; i < timeOutOptionElements.length; i++) {
+    if (selectedValue === timeOutOptionElements[i].value) {
+      timeOutOptionElements[i].selected = true;
+      return;
+    }
+  }
+
+};
+
+var doValidationForm = function () {
+  doGuestsValidation();
+  doMinPriceValue();
+
+  addressInputElement.readOnly = true;
+
+  roomSelectElement.addEventListener('change', doGuestsValidation);
+  typeSelectElement.addEventListener('change', doMinPriceValue);
+
+  timeOutSelectElement.addEventListener('change', doChangeTimeOut);
+  timeInSelectElement.addEventListener('change', doChangeTimeIn);
+};
+
 var init = function () {
   doInactiveForm(formFieldsetElements);
   addMainPinListener();
   fillAddressInput();
-  doGuestsValidation();
-  roomSectionElement.addEventListener('change', doGuestsValidation);
+  doValidationForm();
 };
 
 init();
