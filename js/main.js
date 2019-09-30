@@ -40,6 +40,7 @@ var MAX_GUEST = 10;
 var MIN_Y = 130;
 var MAX_Y = 630;
 var ENTER_KEYCODE = 13;
+var ESC_KEYCODE = 27;
 
 var activeMode = false;
 
@@ -149,11 +150,41 @@ var renderPin = function (advData) {
   return pinElement;
 };
 
+
+var addPinClickListener = function (element, data) {
+  element.addEventListener('click', function () {
+
+    if (popupElement) {
+      popupElement.remove();
+    }
+    addCard(data);
+
+    var popupElement = document.querySelector('.map__card');
+    var popupCloseElement = document.querySelector('.popup__close');
+
+    var closePopup = function () {
+      popupElement.remove();
+    };
+
+    popupCloseElement.addEventListener('click', function () {
+      closePopup();
+    });
+
+    window.addEventListener('keydown', function (evt) {
+      onElementEscPress(evt, closePopup);
+    });
+
+
+  });
+};
+
 var renderPins = function (advList) {
   var fragment = document.createDocumentFragment();
-
   for (var i = 0; i < advList.length; i++) {
     var pin = renderPin(advList[i]);
+
+    addPinClickListener(pin, advList[i]);
+
     fragment.appendChild(pin);
   }
 
@@ -239,10 +270,20 @@ var doInactiveForm = function () {
 
 };
 
-var onMainPinEnterPress = function (evt) {
+var onElementEnterPress = function (evt, action) {
   if (evt.keyCode === ENTER_KEYCODE) {
-    doActiveMode();
+    action();
   }
+};
+
+var onElementEscPress = function (evt, action) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    action();
+  }
+};
+
+var onMainPinEnterPress = function (evt) {
+  onElementEnterPress(evt, doActiveMode);
 };
 
 var doActiveMode = function () {
@@ -260,8 +301,6 @@ var doActiveMode = function () {
   showMapDialog();
   var advArray = generateRandomAdv(NUMBER_OF_ADV);
   renderPins(advArray);
-  addCard(advArray[0]);
-
 
   pinMainElement.removeEventListener('mousedown', doActiveMode);
   pinMainElement.removeEventListener('keydown', onMainPinEnterPress);
@@ -319,4 +358,3 @@ var init = function () {
 };
 
 init();
-
