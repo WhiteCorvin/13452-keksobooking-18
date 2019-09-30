@@ -380,12 +380,12 @@ var onTypeSelectElementChange = function () {
   priceInputElement.placeholder = typeValue;
 };
 
-var synchronTime = function (timeClick, timeChange) {
-  var selectedValue = getSelectedElementValue(timeClick);
+var syncTime = function (clickedTime, changedTime) {
+  var selectedValue = getSelectedElementValue(clickedTime);
 
-  for (var i = 0; i < timeChange.length; i++) {
-    if (selectedValue === timeChange[i].value) {
-      timeChange[i].selected = true;
+  for (var i = 0; i < changedTime.length; i++) {
+    if (selectedValue === changedTime[i].value) {
+      changedTime[i].selected = true;
       return;
     }
   }
@@ -393,11 +393,11 @@ var synchronTime = function (timeClick, timeChange) {
 };
 
 var onTimeOutSelectElementChange = function () {
-  synchronTime(timeOutOptionElements, timeInOptionElements);
+  syncTime(timeOutOptionElements, timeInOptionElements);
 };
 
 var onTimeInSelectElementChange = function () {
-  synchronTime(timeInOptionElements, timeOutOptionElements);
+  syncTime(timeInOptionElements, timeOutOptionElements);
 };
 
 var doValidationForm = function () {
