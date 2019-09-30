@@ -354,7 +354,7 @@ var getSelectedElementValue = function (arr) {
   return '';
 };
 
-var doGuestsValidation = function () {
+var onRoomSelectElementChange = function () {
   var roomValue = Number(getSelectedElementValue(roomOptionElements));
 
   for (var i = 0; i < capacityOptionElements.length; i++) {
@@ -373,48 +373,44 @@ var doGuestsValidation = function () {
 
 };
 
-var doMinPriceValue = function () {
+var onTypeSelectElementChange = function () {
   var selectedType = getSelectedElementValue(typeOptionElements);
   var typeValue = getValueByKey(TYPES_OPTIONS, selectedType).minPrice;
   priceInputElement.min = typeValue;
   priceInputElement.placeholder = typeValue;
 };
 
-var doChangeTimeOut = function () {
-  var selectedValue = getSelectedElementValue(timeOutOptionElements);
+var synchronTime = function (timeClick, timeChange) {
+  var selectedValue = getSelectedElementValue(timeClick);
 
-  for (var i = 0; i < timeInOptionElements.length; i++) {
-    if (selectedValue === timeInOptionElements[i].value) {
-      timeInOptionElements[i].selected = true;
+  for (var i = 0; i < timeChange.length; i++) {
+    if (selectedValue === timeChange[i].value) {
+      timeChange[i].selected = true;
       return;
     }
   }
 
 };
 
-var doChangeTimeIn = function () {
-  var selectedValue = getSelectedElementValue(timeInOptionElements);
+var onTimeOutSelectElementChange = function () {
+  synchronTime(timeOutOptionElements, timeInOptionElements);
+};
 
-  for (var i = 0; i < timeOutOptionElements.length; i++) {
-    if (selectedValue === timeOutOptionElements[i].value) {
-      timeOutOptionElements[i].selected = true;
-      return;
-    }
-  }
-
+var onTimeInSelectElementChange = function () {
+  synchronTime(timeInOptionElements, timeOutOptionElements);
 };
 
 var doValidationForm = function () {
-  doGuestsValidation();
-  doMinPriceValue();
+  onRoomSelectElementChange();
+  onTypeSelectElementChange();
 
   addressInputElement.readOnly = true;
 
-  roomSelectElement.addEventListener('change', doGuestsValidation);
-  typeSelectElement.addEventListener('change', doMinPriceValue);
+  roomSelectElement.addEventListener('change', onRoomSelectElementChange);
+  typeSelectElement.addEventListener('change', onTypeSelectElementChange);
 
-  timeOutSelectElement.addEventListener('change', doChangeTimeOut);
-  timeInSelectElement.addEventListener('change', doChangeTimeIn);
+  timeOutSelectElement.addEventListener('change', onTimeOutSelectElementChange);
+  timeInSelectElement.addEventListener('change', onTimeInSelectElementChange);
 };
 
 var init = function () {
