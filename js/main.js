@@ -26,11 +26,23 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-var TYPES_TRANSLATE = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  bungalo: 'Бунгало',
-  house: 'Дом'
+var TYPES_OPTIONS = {
+  palace: {
+    name: 'Дворец',
+    minPrice: '10000'
+  },
+  flat: {
+    name: 'Квартира',
+    minPrice: '1000'
+  },
+  bungalo: {
+    name: 'Бунгало',
+    minPrice: '0'
+  },
+  house: {
+    name: 'Дом',
+    minPrice: '5000'
+  }
 };
 
 var NUMBER_OF_ADV = 8;
@@ -40,6 +52,7 @@ var MAX_GUEST = 10;
 var MIN_Y = 130;
 var MAX_Y = 630;
 var ENTER_KEYCODE = 13;
+var ESC_KEYCODE = 27;
 
 var activeMode = false;
 
@@ -57,9 +70,21 @@ var formFieldsetElements = document.querySelectorAll('.ad-form__element');
 
 var formAddressInputElement = document.querySelector('[name="address"]');
 
-var roomSectionElement = document.querySelector('#room_number');
-var roomOptionElements = document.querySelector('[name="rooms"]').querySelectorAll('option');
+var roomSelectElement = document.querySelector('[name="rooms"]');
+var roomOptionElements = roomSelectElement.querySelectorAll('option');
 var capacityOptionElements = document.querySelector('[name="capacity"]').querySelectorAll('option');
+
+var typeSelectElement = document.querySelector('[name="type"]');
+var typeOptionElements = typeSelectElement.querySelectorAll('option');
+var priceInputElement = document.querySelector('[name="price"]');
+
+var addressInputElement = document.querySelector('[name="address"]');
+
+var timeInSelectElement = document.querySelector('[name="timein"]');
+var timeInOptionElements = timeInSelectElement.querySelectorAll('option');
+
+var timeOutSelectElement = document.querySelector('[name="timeout"]');
+var timeOutOptionElements = timeOutSelectElement.querySelectorAll('option');
 
 var getRandomInt = function (max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -149,11 +174,40 @@ var renderPin = function (advData) {
   return pinElement;
 };
 
+
+var addPinClickListener = function (element, data) {
+  element.addEventListener('click', function () {
+    var popupElement = document.querySelector('.map__card');
+    if (popupElement) {
+      popupElement.remove();
+    }
+    addCard(data);
+
+    popupElement = document.querySelector('.map__card');
+    var popupCloseElement = popupElement.querySelector('.popup__close');
+
+    var closePopup = function () {
+      popupElement.remove();
+    };
+
+    popupCloseElement.addEventListener('click', function () {
+      closePopup();
+    });
+
+    window.addEventListener('keydown', function (evt) {
+      onElementEscPress(evt, closePopup);
+    });
+
+  });
+};
+
 var renderPins = function (advList) {
   var fragment = document.createDocumentFragment();
-
   for (var i = 0; i < advList.length; i++) {
     var pin = renderPin(advList[i]);
+
+    addPinClickListener(pin, advList[i]);
+
     fragment.appendChild(pin);
   }
 
@@ -209,7 +263,7 @@ var renderCard = function (adv) {
 
   cardElement.querySelector('.popup__title').textContent = adv.offer.title;
   cardElement.querySelector('.popup__text--price').firstChild.nodeValue = adv.offer.price + ' ₽';
-  cardElement.querySelector('.popup__type').textContent = getValueByKey(TYPES_TRANSLATE, name);
+  cardElement.querySelector('.popup__type').textContent = getValueByKey(TYPES_OPTIONS, name).name;
   cardElement.querySelector('.popup__text--capacity').textContent = getCapacityText(adv.offer.rooms, adv.offer.guests);
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + adv.offer.checkin + ', выезд до ' + adv.offer.checkout;
   cardElement.querySelector('.popup__description').textContent = adv.offer.description;
@@ -239,10 +293,20 @@ var doInactiveForm = function () {
 
 };
 
-var onMainPinEnterPress = function (evt) {
+var onElementEnterPress = function (evt, action) {
   if (evt.keyCode === ENTER_KEYCODE) {
-    doActiveMode();
+    action();
   }
+};
+
+var onElementEscPress = function (evt, action) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    action();
+  }
+};
+
+var onMainPinEnterPress = function (evt) {
+  onElementEnterPress(evt, doActiveMode);
 };
 
 var doActiveMode = function () {
@@ -260,8 +324,6 @@ var doActiveMode = function () {
   showMapDialog();
   var advArray = generateRandomAdv(NUMBER_OF_ADV);
   renderPins(advArray);
-  addCard(advArray[0]);
-
 
   pinMainElement.removeEventListener('mousedown', doActiveMode);
   pinMainElement.removeEventListener('keydown', onMainPinEnterPress);
@@ -278,6 +340,7 @@ var fillAddressInput = function () {
   var topWithHeight = activeMode ? (top + pinMainElement.offsetHeight) : (top + pinMainElement.offsetHeight / 2);
 
   formAddressInputElement.value = leftWithWidth + ', ' + topWithHeight;
+  formAddressInputElement.nodeValue = leftWithWidth + ', ' + topWithHeight;
 };
 
 var getSelectedElementValue = function (arr) {
@@ -291,7 +354,7 @@ var getSelectedElementValue = function (arr) {
   return '';
 };
 
-var doGuestsValidation = function () {
+var onRoomSelectElementChange = function () {
   var roomValue = Number(getSelectedElementValue(roomOptionElements));
 
   for (var i = 0; i < capacityOptionElements.length; i++) {
@@ -310,13 +373,51 @@ var doGuestsValidation = function () {
 
 };
 
+var onTypeSelectElementChange = function () {
+  var selectedType = getSelectedElementValue(typeOptionElements);
+  var typeValue = getValueByKey(TYPES_OPTIONS, selectedType).minPrice;
+  priceInputElement.min = typeValue;
+  priceInputElement.placeholder = typeValue;
+};
+
+var syncTime = function (clickedTime, changedTime) {
+  var selectedValue = getSelectedElementValue(clickedTime);
+
+  for (var i = 0; i < changedTime.length; i++) {
+    if (selectedValue === changedTime[i].value) {
+      changedTime[i].selected = true;
+      return;
+    }
+  }
+
+};
+
+var onTimeOutSelectElementChange = function () {
+  syncTime(timeOutOptionElements, timeInOptionElements);
+};
+
+var onTimeInSelectElementChange = function () {
+  syncTime(timeInOptionElements, timeOutOptionElements);
+};
+
+var doValidationForm = function () {
+  onRoomSelectElementChange();
+  onTypeSelectElementChange();
+
+  addressInputElement.readOnly = true;
+
+  roomSelectElement.addEventListener('change', onRoomSelectElementChange);
+  typeSelectElement.addEventListener('change', onTypeSelectElementChange);
+
+  timeOutSelectElement.addEventListener('change', onTimeOutSelectElementChange);
+  timeInSelectElement.addEventListener('change', onTimeInSelectElementChange);
+};
+
 var init = function () {
   doInactiveForm(formFieldsetElements);
   addMainPinListener();
   fillAddressInput();
-  doGuestsValidation();
-  roomSectionElement.addEventListener('change', doGuestsValidation);
+  doValidationForm();
 };
 
 init();
-
