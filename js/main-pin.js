@@ -39,7 +39,7 @@
 
         if (coords.y < userMapBordersElement.clientLeft || coords.y > (userMapBordersElement.clientWidth - window.variables.pinMainElement.clientWidth)) {
           return;
-        } else if (coords.x < window.variables.MIN_Y || coords.x > (window.variables.MAX_Y - window.variables.pinMainElement.clientHeight)) {
+        } else if (coords.x < window.variables.MIN_Y - window.variables.pinMainElement.clientHeight || coords.x > (window.variables.MAX_Y - window.variables.pinMainElement.clientHeight)) {
           return;
         }
 
