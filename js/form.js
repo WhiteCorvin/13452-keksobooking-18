@@ -138,7 +138,8 @@
 
   window.form = {
     initializationForm: initializationForm,
-    doActiveForm: doActiveForm
+    doActiveForm: doActiveForm,
+    fillAddressInput: fillAddressInput
   };
 
 })();
