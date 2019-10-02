@@ -39,7 +39,7 @@
 
   var fillAddressInput = function () {
     var top = window.variables.pinMainElement.offsetTop;
-    var leftWithWidth = window.variables.pinMainElement.offsetLeft + window.variables.pinMainElement.offsetWidth / 2;
+    var leftWithWidth = Math.round(window.variables.pinMainElement.offsetLeft + window.variables.pinMainElement.offsetWidth / 2);
     var topWithHeight = activeMode ? (top + window.variables.pinMainElement.offsetHeight) : (top + window.variables.pinMainElement.offsetHeight / 2);
 
     formAddressInputElement.value = leftWithWidth + ', ' + topWithHeight;
@@ -138,7 +138,8 @@
 
   window.form = {
     initializationForm: initializationForm,
-    doActiveForm: doActiveForm
+    doActiveForm: doActiveForm,
+    fillAddressInput: fillAddressInput
   };
 
 })();

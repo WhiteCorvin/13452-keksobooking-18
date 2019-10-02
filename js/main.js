@@ -21,16 +21,18 @@
 
     window.variables.pinMainElement.removeEventListener('mousedown', doActiveMode);
     window.variables.pinMainElement.removeEventListener('keydown', onMainPinEnterPress);
+
+    window.initMainPin();
   };
 
-  var addMainPinListener = function () {
+  var addClickMainPinListener = function () {
     window.variables.pinMainElement.addEventListener('mousedown', doActiveMode);
     window.variables.pinMainElement.addEventListener('keydown', onMainPinEnterPress);
   };
 
   var init = function () {
     window.form.initializationForm();
-    addMainPinListener();
+    addClickMainPinListener();
   };
 
   init();

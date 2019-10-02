@@ -30,8 +30,6 @@
 
   var MAX_MONEY = 1000000;
   var MAX_GUEST = 10;
-  var MIN_Y = 130;
-  var MAX_Y = 630;
 
   var generateRandomAdv = function (number) {
     var advList = [];
@@ -55,7 +53,7 @@
         },
         location: {
           x: window.util.getRandomIntInclusive(1, window.variables.userMapElement.offsetWidth),
-          y: window.util.getRandomIntInclusive(MIN_Y, MAX_Y)
+          y: window.util.getRandomIntInclusive(window.variables.MIN_Y, window.variables.MAX_Y)
         }
       });
       advList[i].offer.address = advList[i].location.x + ', ' + advList[i].location.y;
