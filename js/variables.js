@@ -6,7 +6,8 @@
   var pinMainElement = document.querySelector('.map__pin--main');
 
   window.variables = {
-
+    MIN_Y: 130,
+    MAX_Y: 630,
     MAX_ROOM: 100,
     TYPES_OPTIONS: {
       palace: {

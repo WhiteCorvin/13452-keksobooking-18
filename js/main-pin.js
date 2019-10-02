@@ -1,8 +1,7 @@
 'use strict';
 
 (function () {
-
-  var userMapBorders = document.querySelector('.map__overlay');
+  var userMapBordersElement = document.querySelector('.map__overlay');
 
   var addMoveMainPinElementListener = function () {
     window.variables.pinMainElement.addEventListener('mousedown', function (evt) {
@@ -38,9 +37,9 @@
           y: (window.variables.pinMainElement.offsetLeft - shift.x)
         };
 
-        if (coords.y < userMapBorders.clientLeft || coords.y > (userMapBorders.clientWidth - window.variables.pinMainElement.clientWidth)) {
+        if (coords.y < userMapBordersElement.clientLeft || coords.y > (userMapBordersElement.clientWidth - window.variables.pinMainElement.clientWidth)) {
           return;
-        } else if (coords.x < userMapBorders.clientTop || coords.x > (userMapBorders.clientHeight - window.variables.pinMainElement.clientHeight)) {
+        } else if (coords.x < window.variables.MIN_Y || coords.x > (window.variables.MAX_Y - window.variables.pinMainElement.clientHeight)) {
           return;
         }
 
