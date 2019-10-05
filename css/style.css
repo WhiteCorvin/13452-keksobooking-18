@@ -1248,3 +1248,38 @@ fieldset {
   outline: none;
   opacity: 0.6;
 }
+
+.error__close {
+  position: absolute;
+
+  top: 100px;
+  right: 100px;
+
+  width: 50px;
+  height: 50px;
+
+  background-color: transparent;
+  border: none;
+}
+
+.error__close::before,
+.error__close::after {
+  content: "";
+
+  position: absolute;
+  right: 0;
+  top: 20px;
+
+  width: 50px;
+  height: 5px;
+
+  background-color: #ffffff;
+}
+
+.error__close::before {
+  transform: rotate(45deg);
+}
+
+.error__close::after {
+  transform: rotate(-45deg);
+}
