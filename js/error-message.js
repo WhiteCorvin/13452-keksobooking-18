@@ -2,10 +2,9 @@
 
 (function () {
 
-  var mainElement = document.querySelector('main');
   var messageTemplate = document.querySelector('#error').content.querySelector('.error');
 
-  var addErrorCloseListener = function () {
+  var addErrorCloseListener = function (requestType) {
     var errorMessageElement = document.querySelector('.error');
     var errorMessageCloseElement = errorMessageElement.querySelector('.error__close');
     var errorMessageButtonElement = errorMessageElement.querySelector('.error__button');
@@ -20,7 +19,12 @@
     };
 
     var doReconnect = function () {
-      window.connect(window.onLoadSuccess, window.errorMessage);
+      if (requestType === 'GET') {
+        window.main.loadDataPin();
+      } else {
+        window.form.submitDataForm();
+      }
+
       closeError();
     };
 
@@ -30,19 +34,21 @@
     });
     window.addEventListener('keydown', onErrorCloseEscPress);
 
-    errorMessageButtonElement.addEventListener('click', doReconnect);
+    errorMessageButtonElement.addEventListener('click', function () {
+      doReconnect();
+    });
     errorMessageButtonElement.addEventListener('keydown', function (evt) {
       window.util.onElementEnterPress(evt, doReconnect);
     });
   };
 
-  var errorMessage = function (message) {
+  var errorMessage = function (requestType, message) {
     var errorElement = messageTemplate.cloneNode(true);
 
     errorElement.querySelector('.error__message').textContent = message;
 
-    mainElement.prepend(errorElement);
-    addErrorCloseListener();
+    window.variables.mainElement.prepend(errorElement);
+    addErrorCloseListener(requestType);
   };
 
   window.errorMessage = errorMessage;

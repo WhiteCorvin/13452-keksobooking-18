@@ -2,7 +2,7 @@
 
 (function () {
   var LOAD_URL = 'https://js.dump.academy/keksobooking/data';
-  var SAVE_URL = 'https://js.dump.academy/code-and-magick/';
+  var SAVE_URL = 'https://js.dump.academy/keksobooking/';
 
   var connect = function (onLoad, onError, data) {
     var url = LOAD_URL;
@@ -20,22 +20,33 @@
       if (xhr.status === 200) {
         onLoad(xhr.response);
       } else {
-        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        onError(requestType, 'Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
+      onError(requestType, 'Произошла ошибка соединения');
     });
 
     xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      onError(requestType, 'Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
     xhr.open(requestType, url);
     xhr.send(data);
   };
 
-  window.connect = connect;
+  var load = function (onLoad, onError) {
+    connect(onLoad, onError);
+  };
+
+  var save = function (data, onLoad, onError) {
+    connect(onLoad, onError, data);
+  };
+
+  window.backend = {
+    load: load,
+    save: save
+  };
 
 })();

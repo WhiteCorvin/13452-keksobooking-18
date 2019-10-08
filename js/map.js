@@ -5,6 +5,12 @@
   var pinListElement = document.querySelector('.map__pins');
   var filtersContainerElement = document.querySelector('.map__filters-container');
 
+  var closePopup = function () {
+    var popupElement = document.querySelector('.map__card');
+
+    popupElement.remove();
+  };
+
   var addPinClickListener = function (element, data) {
     element.addEventListener('click', function () {
       var popupElement = document.querySelector('.map__card');
@@ -15,10 +21,6 @@
 
       popupElement = document.querySelector('.map__card');
       var popupCloseElement = popupElement.querySelector('.popup__close');
-
-      var closePopup = function () {
-        popupElement.remove();
-      };
 
       popupCloseElement.addEventListener('click', function () {
         closePopup();
@@ -44,11 +46,23 @@
     pinListElement.appendChild(fragment);
   };
 
+  var deletePins = function () {
+    var pins = pinListElement.querySelectorAll('[type="button"]');
+
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].parentNode.removeChild(pins[i]);
+    }
+
+  };
+
   var addCard = function (advItem) {
     var adv = window.renderCard(advItem);
     window.variables.userMapElement.insertBefore(adv, filtersContainerElement);
   };
 
-  window.renderPins = renderPins;
+  window.map = {
+    renderPins: renderPins,
+    deletePins: deletePins
+  };
 
 })();

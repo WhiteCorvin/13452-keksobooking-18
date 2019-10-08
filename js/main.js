@@ -6,24 +6,41 @@
     window.variables.userMapElement.classList.remove('map--faded');
   };
 
+  var hideMapDialog = function () {
+    window.variables.userMapElement.classList.add('map--faded');
+  };
+
   var onMainPinEnterPress = function (evt) {
     window.util.onElementEnterPress(evt, doActiveMode);
   };
 
   var onLoadSuccess = function (data) {
-    window.renderPins(data);
+    window.map.renderPins(data);
+  };
+
+  var loadDataPin = function () {
+    window.backend.load(onLoadSuccess, window.errorMessage);
   };
 
   var doActiveMode = function () {
     window.form.doActiveForm();
+    window.form.doSubmitFormListener();
 
     showMapDialog();
-    window.connect(onLoadSuccess, window.errorMessage);
+    loadDataPin();
 
     window.variables.pinMainElement.removeEventListener('mousedown', doActiveMode);
     window.variables.pinMainElement.removeEventListener('keydown', onMainPinEnterPress);
 
-    window.initMainPin();
+    window.mainPin.initMainPin();
+  };
+
+  var doDeactiveMode = function () {
+    window.mainPin.resetMainPin();
+    window.map.deletePins();
+    window.form.doResetForm();
+    hideMapDialog();
+    init();
   };
 
   var addClickMainPinListener = function () {
@@ -39,7 +56,11 @@
 
   init();
 
-  window.onLoadSuccess = onLoadSuccess;
+  window.main = {
+    loadDataPin: loadDataPin,
+    doDeactiveMode: doDeactiveMode
+  };
+
 
 })();
 
