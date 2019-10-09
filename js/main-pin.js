@@ -1,6 +1,12 @@
 'use strict';
 
 (function () {
+
+  var pinStartCoords = {
+    x: window.variables.pinMainElement.style.top,
+    y: window.variables.pinMainElement.style.left
+  };
+
   var userMapBordersElement = document.querySelector('.map__overlay');
 
   var addMoveMainPinElementListener = function () {
@@ -55,10 +61,18 @@
     });
   };
 
+  var resetMainPin = function () {
+    window.variables.pinMainElement.style.top = pinStartCoords.x;
+    window.variables.pinMainElement.style.left = pinStartCoords.y;
+  };
+
   var initMainPin = function () {
     addMoveMainPinElementListener();
   };
 
-  window.initMainPin = initMainPin;
+  window.mainPin = {
+    init: initMainPin,
+    reset: resetMainPin
+  };
 
 })();

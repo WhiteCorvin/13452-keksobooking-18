@@ -5,26 +5,29 @@
   var activeMode = false;
 
   var formElement = document.querySelector('.ad-form');
-  var formHeaderFieldsetElement = document.querySelector('.ad-form-header');
-  var formFieldsetElements = document.querySelectorAll('.ad-form__element');
+  var formHeaderFieldsetElement = formElement.querySelector('.ad-form-header');
+  var formFieldsetElements = formElement.querySelectorAll('.ad-form__element');
 
-  var formAddressInputElement = document.querySelector('[name="address"]');
+  var formAddressInputElement = formElement.querySelector('[name="address"]');
 
-  var roomSelectElement = document.querySelector('[name="rooms"]');
+  var roomSelectElement = formElement.querySelector('[name="rooms"]');
   var roomOptionElements = roomSelectElement.querySelectorAll('option');
-  var capacityOptionElements = document.querySelector('[name="capacity"]').querySelectorAll('option');
+  var capacityOptionElements = formElement.querySelector('[name="capacity"]').querySelectorAll('option');
 
-  var typeSelectElement = document.querySelector('[name="type"]');
+  var typeSelectElement = formElement.querySelector('[name="type"]');
   var typeOptionElements = typeSelectElement.querySelectorAll('option');
-  var priceInputElement = document.querySelector('[name="price"]');
+  var priceInputElement = formElement.querySelector('[name="price"]');
 
-  var addressInputElement = document.querySelector('[name="address"]');
+  var addressInputElement = formElement.querySelector('[name="address"]');
 
-  var timeInSelectElement = document.querySelector('[name="timein"]');
+  var timeInSelectElement = formElement.querySelector('[name="timein"]');
   var timeInOptionElements = timeInSelectElement.querySelectorAll('option');
 
-  var timeOutSelectElement = document.querySelector('[name="timeout"]');
+  var timeOutSelectElement = formElement.querySelector('[name="timeout"]');
   var timeOutOptionElements = timeOutSelectElement.querySelectorAll('option');
+
+  var formTitleInputElement = formElement.querySelector('[name="title"]');
+  var formDescriptionInputElement = formElement.querySelector('[name="description"]');
 
   var getSelectedElementValue = function (arr) {
 
@@ -105,6 +108,27 @@
 
   };
 
+  var doResetForm = function () {
+    var formAllOptionElements = formElement.querySelectorAll('option');
+    var formAllCheckboxElements = formElement.querySelectorAll('[type="checkbox"]');
+
+    for (var i = 0; i < formAllOptionElements.length; i++) {
+      formAllOptionElements[i].selected = formAllOptionElements[i].defaultSelected;
+    }
+
+    for (var j = 0; j < formAllCheckboxElements.length; j++) {
+      formAllCheckboxElements[j].checked = formAllCheckboxElements[j].defaultChecked;
+    }
+
+    formElement.classList.add('ad-form--disabled');
+
+    formTitleInputElement.value = '';
+    priceInputElement.value = '';
+    formDescriptionInputElement.value = '';
+
+    formElement.removeEventListener('submit', onFormSubmit);
+  };
+
   var doValidationForm = function () {
     onRoomSelectElementChange();
     onTypeSelectElementChange();
@@ -136,10 +160,30 @@
     formElement.classList.remove('ad-form--disabled');
   };
 
+  var submitDataForm = function () {
+    window.backend.save(new FormData(formElement), onSubmitSuccess, window.errorMessage);
+  };
+  var onSubmitSuccess = function () {
+    window.main.doDeactiveMode();
+    window.successMessage();
+  };
+
+  var onFormSubmit = function (evt) {
+    evt.preventDefault();
+    submitDataForm();
+  };
+
+  var doSubmitFormListener = function () {
+    formElement.addEventListener('submit', onFormSubmit);
+  };
+
   window.form = {
     initializationForm: initializationForm,
     doActiveForm: doActiveForm,
-    fillAddressInput: fillAddressInput
+    doResetForm: doResetForm,
+    fillAddressInput: fillAddressInput,
+    doSubmitFormListener: doSubmitFormListener,
+    submitDataForm: submitDataForm
   };
 
 })();

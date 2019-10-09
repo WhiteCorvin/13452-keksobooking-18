@@ -2,6 +2,7 @@
 
 (function () {
 
+  var mainElement = document.querySelector('main');
   var userMapElement = document.querySelector('.map');
   var pinMainElement = document.querySelector('.map__pin--main');
 
@@ -28,7 +29,8 @@
       }
     },
     userMapElement: userMapElement,
-    pinMainElement: pinMainElement
+    pinMainElement: pinMainElement,
+    mainElement: mainElement
   };
 
 })();
