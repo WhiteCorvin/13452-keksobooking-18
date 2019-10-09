@@ -22,6 +22,8 @@
 
     window.variables.mainElement.prepend(successElement);
 
+    window.map.closePopup();
+
     window.addEventListener('click', closeSuccessElement);
     window.addEventListener('keydown', onKeydownSuccessElement);
   };

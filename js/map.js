@@ -8,7 +8,10 @@
   var closePopup = function () {
     var popupElement = document.querySelector('.map__card');
 
-    popupElement.remove();
+    if (popupElement) {
+      popupElement.remove();
+    }
+
   };
 
   var addPinClickListener = function (element, data) {
@@ -62,7 +65,8 @@
 
   window.map = {
     renderPins: renderPins,
-    deletePins: deletePins
+    deletePins: deletePins,
+    closePopup: closePopup
   };
 
 })();

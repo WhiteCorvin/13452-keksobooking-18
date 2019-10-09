@@ -2,12 +2,14 @@
 
 (function () {
 
+  var FADED_CLASS = 'map--faded';
+
   var showMapDialog = function () {
-    window.variables.userMapElement.classList.remove('map--faded');
+    window.variables.userMapElement.classList.remove(FADED_CLASS);
   };
 
   var hideMapDialog = function () {
-    window.variables.userMapElement.classList.add('map--faded');
+    window.variables.userMapElement.classList.add(FADED_CLASS);
   };
 
   var onMainPinEnterPress = function (evt) {
@@ -32,11 +34,11 @@
     window.variables.pinMainElement.removeEventListener('mousedown', doActiveMode);
     window.variables.pinMainElement.removeEventListener('keydown', onMainPinEnterPress);
 
-    window.mainPin.initMainPin();
+    window.mainPin.init();
   };
 
   var doDeactiveMode = function () {
-    window.mainPin.resetMainPin();
+    window.mainPin.reset();
     window.map.deletePins();
     window.form.doResetForm();
     hideMapDialog();
