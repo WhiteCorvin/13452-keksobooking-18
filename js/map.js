@@ -2,6 +2,9 @@
 
 (function () {
 
+  var VALUE_OF_PINS = 5;
+  var NOTICE_CLASS = 'map__pin--notice';
+
   var pinListElement = document.querySelector('.map__pins');
   var filtersContainerElement = document.querySelector('.map__filters-container');
 
@@ -36,10 +39,25 @@
     });
   };
 
+  var deleteRenderedPins = function () {
+    var renderedPins = pinListElement.querySelectorAll('.' + NOTICE_CLASS);
+
+    if (renderedPins) {
+      renderedPins.forEach(function (element) {
+        element.remove();
+      });
+    }
+
+  };
+
   var renderPins = function (advList) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < advList.length; i++) {
+    deleteRenderedPins();
+
+    for (var i = 0; i <= (VALUE_OF_PINS - 1); i++) {
       var pin = window.renderPin(advList[i]);
+
+      pin.classList.add(NOTICE_CLASS);
 
       addPinClickListener(pin, advList[i]);
 

@@ -17,6 +17,7 @@
   };
 
   var onLoadSuccess = function (data) {
+    window.filter.unBlock(data);
     window.map.renderPins(data);
   };
 
@@ -52,8 +53,8 @@
 
   var init = function () {
     window.form.initializationForm();
+    window.filter.block();
     addClickMainPinListener();
-
   };
 
   init();

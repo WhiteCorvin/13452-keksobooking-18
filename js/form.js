@@ -56,20 +56,16 @@
       var capacityValue = Number(capacityOptionElements[i].value);
 
       if (roomValue >= capacityValue && roomValue !== window.variables.MAX_ROOM && capacityValue !== 0) {
-        doChangeDisabledElement(capacityOptionElements[i], false);
+        window.util.doChangeDisabledElement(capacityOptionElements[i], false);
         capacityOptionElements[i].selected = true;
       } else if (capacityValue === 0 && roomValue === window.variables.MAX_ROOM) {
-        doChangeDisabledElement(capacityOptionElements[i], false);
+        window.util.doChangeDisabledElement(capacityOptionElements[i], false);
         capacityOptionElements[i].selected = true;
       } else {
-        doChangeDisabledElement(capacityOptionElements[i], true);
+        window.util.doChangeDisabledElement(capacityOptionElements[i], true);
       }
     }
 
-  };
-
-  var doChangeDisabledElement = function (element, isDisabled) {
-    element.disabled = isDisabled;
   };
 
   var onTypeSelectElementChange = function () {
@@ -100,10 +96,10 @@
   };
 
   var doInactiveForm = function () {
-    doChangeDisabledElement(formHeaderFieldsetElement, true);
+    window.util.doChangeDisabledElement(formHeaderFieldsetElement, true);
 
     for (var i = 0; i < formFieldsetElements.length; i++) {
-      doChangeDisabledElement(formFieldsetElements[i], true);
+      window.util.doChangeDisabledElement(formFieldsetElements[i], true);
     }
 
   };
@@ -151,10 +147,10 @@
   var doActiveForm = function () {
     activeMode = true;
     fillAddressInput();
-    doChangeDisabledElement(formHeaderFieldsetElement, false);
+    window.util.doChangeDisabledElement(formHeaderFieldsetElement, false);
 
     for (var i = 0; i < formFieldsetElements.length; i++) {
-      doChangeDisabledElement(formFieldsetElements[i], false);
+      window.util.doChangeDisabledElement(formFieldsetElements[i], false);
     }
 
     formElement.classList.remove('ad-form--disabled');
