@@ -53,8 +53,10 @@
   var renderPins = function (advList) {
     var fragment = document.createDocumentFragment();
     deleteRenderedPins();
+    closePopup();
+    var valueOfPins = (advList.length >= VALUE_OF_PINS) ? VALUE_OF_PINS : advList.length;
 
-    for (var i = 0; i <= (VALUE_OF_PINS - 1); i++) {
+    for (var i = 0; i <= (valueOfPins - 1); i++) {
       var pin = window.renderPin(advList[i]);
 
       pin.classList.add(NOTICE_CLASS);

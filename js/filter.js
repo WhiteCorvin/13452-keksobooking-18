@@ -37,19 +37,9 @@
     });
   };
 
-  var getRank = function (notice) {
-    var rank = 0;
-
-    if (notice.offer.type === typeNotice) {
-      rank += 1;
-    }
-
-    return rank;
-  };
-
   var filterSortByType = function () {
-    window.map.renderPins(loadedNotice.sort(function (left, right) {
-      return getRank(right) - getRank(left);
+    window.map.renderPins(loadedNotice.filter(function (element) {
+      return element.offer.type === typeNotice;
     }));
   };
 
