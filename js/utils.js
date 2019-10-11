@@ -60,6 +60,10 @@
     }
   };
 
+  var doChangeDisabledElement = function (element, isDisabled) {
+    element.disabled = isDisabled;
+  };
+
   window.util = {
     getRandomInt: getRandomInt,
     getRandomIntInclusive: getRandomIntInclusive,
@@ -68,7 +72,8 @@
     getValueByKey: getValueByKey,
     getLastDigit: getLastDigit,
     onElementEnterPress: onElementEnterPress,
-    onElementEscPress: onElementEscPress
+    onElementEscPress: onElementEscPress,
+    doChangeDisabledElement: doChangeDisabledElement
   };
 
 })();
