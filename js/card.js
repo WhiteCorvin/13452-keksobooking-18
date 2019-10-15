@@ -7,7 +7,6 @@
   var getCapacityText = function (rooms, guests) {
     var text = rooms;
     var firstDigitRooms = window.util.getLastDigit(rooms);
-
     if (firstDigitRooms === 1) {
       text += ' комната';
     } else {

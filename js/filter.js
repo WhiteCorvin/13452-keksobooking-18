@@ -2,13 +2,34 @@
 
 (function () {
 
+  var PriceScore = {
+    MIN: 10000,
+    MAX: 50000
+  };
+
+  var ANY_TYPE = 'any';
+
   var loadedNotice = [];
-  var typeNotice;
 
   var filtersElement = document.querySelector('.map__filters');
   var filtersSelectElements = filtersElement.querySelectorAll('.map__filter');
   var filtersFieldsetElement = filtersElement.querySelector('.map__features');
   var filterByTypeElement = filtersElement.querySelector('[name="housing-type"]');
+  var filterByPriceElement = filtersElement.querySelector('[name="housing-price"]');
+  var filterByRoomsElement = filtersElement.querySelector('[name="housing-rooms"]');
+  var filterByGuestsElement = filtersElement.querySelector('[name="housing-guests"]');
+  var filterByFeaturesElements = filtersElement.querySelectorAll('[name="features"]');
+
+  var typeValue;
+  var priceValue;
+  var roomsValue;
+  var guestsValue;
+  var activeFeatures = [];
+
+  var typeTumbler = false;
+  var roomsTumbler = false;
+  var guestsTumbler = false;
+  var priceTumbler = false;
 
   var blockFilter = function () {
     filtersSelectElements.forEach(function (element) {
@@ -18,8 +39,75 @@
     window.util.doChangeDisabledElement(filtersFieldsetElement, true);
   };
 
-  var onTypeChange = window.debounce(function () {
-    filterSortByType();
+  var getPriceIntegerOnValue = function (price) {
+
+    if (price < PriceScore.MIN) {
+      return 'low';
+    } else if (price <= PriceScore.MAX && price >= PriceScore.MIN) {
+      return 'middle';
+    } else if (price > PriceScore.MAX) {
+      return 'high';
+    }
+    return ANY_TYPE;
+  };
+
+  var getRank = function (notice) {
+    var rank = 0;
+    if (notice.offer.type === typeValue) {
+      rank += 1;
+    }
+    if (notice.offer.rooms === parseInt(roomsValue, 10)) {
+      rank += 1;
+    }
+    if (notice.offer.guests === parseInt(guestsValue, 10)) {
+      rank += 1;
+    }
+    if (getPriceIntegerOnValue(notice.offer.price) === priceValue) {
+      rank += 1;
+    }
+    activeFeatures.forEach(function (element) {
+      notice.offer.features.forEach(function (feature) {
+        if (element === feature) {
+          rank += 1;
+        }
+      });
+    });
+    return rank;
+  };
+
+  var onTypeChange = window.debounce(function (value) {
+    typeTumbler = (value !== ANY_TYPE);
+    typeValue = value;
+    updateNoticese();
+  });
+
+  var onPriceChange = window.debounce(function (value) {
+    priceTumbler = (value !== ANY_TYPE);
+    priceValue = value;
+    updateNoticese();
+  });
+
+  var onRoomsChange = window.debounce(function (value) {
+    roomsTumbler = (value !== ANY_TYPE);
+    roomsValue = value;
+    updateNoticese();
+  });
+
+  var onGuestsChange = window.debounce(function (value) {
+    guestsTumbler = (value !== ANY_TYPE);
+    guestsValue = value;
+    updateNoticese();
+  });
+
+
+  var addSectionElementListener = function (section, functionChange) {
+    section.addEventListener('change', function () {
+      functionChange(section.value);
+    });
+  };
+
+  var onCheckboxChange = window.debounce(function () {
+    updateNoticese();
   });
 
   var unBlockFilter = function (notice) {
@@ -31,15 +119,31 @@
 
     window.util.doChangeDisabledElement(filtersFieldsetElement, false);
 
-    filterByTypeElement.addEventListener('change', function () {
-      typeNotice = filterByTypeElement.value;
-      onTypeChange();
+    addSectionElementListener(filterByTypeElement, onTypeChange);
+    addSectionElementListener(filterByPriceElement, onPriceChange);
+    addSectionElementListener(filterByRoomsElement, onRoomsChange);
+    addSectionElementListener(filterByGuestsElement, onGuestsChange);
+
+    filterByFeaturesElements.forEach(function (element) {
+      element.addEventListener('change', function () {
+        if (element.checked) {
+          activeFeatures.push(element.value);
+        } else {
+          activeFeatures.forEach(function (feature, index) {
+            if (element.value === feature) {
+              activeFeatures.splice(index, 1);
+            }
+          });
+        }
+        onCheckboxChange();
+      });
     });
   };
 
-  var filterSortByType = function () {
+  var updateNoticese = function () {
     window.map.renderPins(loadedNotice.filter(function (element) {
-      return element.offer.type === typeNotice;
+      var summOfTumblers = typeTumbler + roomsTumbler + guestsTumbler + priceTumbler + activeFeatures.length;
+      return getRank(element) === summOfTumblers;
     }));
   };
 

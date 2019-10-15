@@ -44,8 +44,7 @@
   var getLastDigit = function (number) {
     var numAsStr = number + '';
     var numbers = numAsStr.split('');
-
-    return Number.parseInt(numbers[number.length - 1], 10);
+    return Number.parseInt(numbers[numbers.length - 1], 10);
   };
 
   var onElementEnterPress = function (evt, action) {
