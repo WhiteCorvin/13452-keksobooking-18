@@ -2,9 +2,9 @@
 
 (function () {
 
-  var PRICE_SCORE = {
-    low: 10000,
-    height: 50000
+  var PriceScore = {
+    MIN: 10000,
+    MAX: 50000
   };
 
   var ANY_TYPE = 'any';
@@ -41,12 +41,12 @@
 
   var getPriceIntegerOnValue = function (price) {
 
-    if (price < PRICE_SCORE.low) {
+    if (price < PriceScore.MIN) {
       return 'low';
-    } else if (price <= PRICE_SCORE.height && price >= PRICE_SCORE.low) {
+    } else if (price <= PriceScore.MAX && price >= PriceScore.MIN) {
       return 'middle';
-    } else if (price > PRICE_SCORE.height) {
-      return 'hight';
+    } else if (price > PriceScore.MAX) {
+      return 'high';
     }
     return ANY_TYPE;
   };
@@ -76,25 +76,25 @@
   };
 
   var onTypeChange = window.debounce(function (value) {
-    typeTumbler = (value === ANY_TYPE) ? false : true;
+    typeTumbler = (value !== ANY_TYPE);
     typeValue = value;
     updateNoticese();
   });
 
   var onPriceChange = window.debounce(function (value) {
-    priceTumbler = (value === ANY_TYPE) ? false : true;
+    priceTumbler = (value !== ANY_TYPE);
     priceValue = value;
     updateNoticese();
   });
 
   var onRoomsChange = window.debounce(function (value) {
-    roomsTumbler = (value === ANY_TYPE) ? false : true;
+    roomsTumbler = (value !== ANY_TYPE);
     roomsValue = value;
     updateNoticese();
   });
 
   var onGuestsChange = window.debounce(function (value) {
-    guestsTumbler = (value === ANY_TYPE) ? false : true;
+    guestsTumbler = (value !== ANY_TYPE);
     guestsValue = value;
     updateNoticese();
   });
@@ -105,6 +105,10 @@
       functionChange(section.value);
     });
   };
+
+  var onCheckboxChange = window.debounce(function () {
+    updateNoticese();
+  });
 
   var unBlockFilter = function (notice) {
     loadedNotice = notice;
@@ -131,7 +135,7 @@
             }
           });
         }
-        updateNoticese();
+        onCheckboxChange();
       });
     });
   };
