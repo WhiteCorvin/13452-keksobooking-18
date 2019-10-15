@@ -2,6 +2,8 @@
 
 (function () {
 
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
   var mainElement = document.querySelector('main');
   var userMapElement = document.querySelector('.map');
   var pinMainElement = document.querySelector('.map__pin--main');
@@ -28,6 +30,7 @@
         minPrice: '5000'
       }
     },
+    FILE_TYPES: FILE_TYPES,
     userMapElement: userMapElement,
     pinMainElement: pinMainElement,
     mainElement: mainElement
