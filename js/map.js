@@ -10,26 +10,26 @@
 
   var closePopup = function () {
     var popupElement = document.querySelector('.map__card');
+    var activePinElement = document.querySelector('.map__pin--active');
 
     if (popupElement) {
       popupElement.remove();
+      activePinElement.classList.remove('map__pin--active');
     }
 
   };
 
   var addPinClickListener = function (element, data) {
     element.addEventListener('click', function () {
-      var popupElement = document.querySelector('.map__card');
-      if (popupElement) {
-        popupElement.remove();
-      }
+      closePopup();
       addCard(data);
+      element.classList.add('map__pin--active');
 
-      popupElement = document.querySelector('.map__card');
-      var popupCloseElement = popupElement.querySelector('.popup__close');
+      var popupCloseElement = document.querySelector('.popup__close');
 
       popupCloseElement.addEventListener('click', function () {
         closePopup();
+        element.classList.remove('map__pin--active');
       });
 
       window.addEventListener('keydown', function (evt) {
