@@ -160,8 +160,8 @@
     window.backend.save(new FormData(formElement), onSubmitSuccess, window.errorMessage);
   };
   var onSubmitSuccess = function () {
-    window.main.doDeactiveMode();
     window.successMessage();
+    window.main.doDeactiveMode();
   };
 
   var onFormSubmit = function (evt) {
