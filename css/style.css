@@ -826,7 +826,7 @@ fieldset {
   width: 60px;
   height: 60px;
   border-radius: 5px;
-};
+}
 
 .ad-form__element--submit {
   -ms-flex-preferred-size: 100%;

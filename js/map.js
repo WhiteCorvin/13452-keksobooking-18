@@ -52,8 +52,8 @@
 
   var renderPins = function (advList) {
     var fragment = document.createDocumentFragment();
-    deleteRenderedPins();
     closePopup();
+    deleteRenderedPins();
     var valueOfPins = (advList.length >= VALUE_OF_PINS) ? VALUE_OF_PINS : advList.length;
 
     for (var i = 0; i <= (valueOfPins - 1); i++) {
