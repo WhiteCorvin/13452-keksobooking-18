@@ -29,6 +29,8 @@
   var formTitleInputElement = formElement.querySelector('[name="title"]');
   var formDescriptionInputElement = formElement.querySelector('[name="description"]');
 
+  var resetFormElement = formElement.querySelector('.ad-form__reset');
+
   var getSelectedElementValue = function (arr) {
 
     for (var i = 0; i < arr.length; i++) {
@@ -104,6 +106,10 @@
 
   };
 
+  var doDisabledFormElements = function () {
+    formElement.classList.add('ad-form--disabled');
+  };
+
   var doResetForm = function () {
     var formAllOptionElements = formElement.querySelectorAll('option');
     var formAllCheckboxElements = formElement.querySelectorAll('[type="checkbox"]');
@@ -115,17 +121,13 @@
     for (var j = 0; j < formAllCheckboxElements.length; j++) {
       formAllCheckboxElements[j].checked = formAllCheckboxElements[j].defaultChecked;
     }
+
     window.resetAvatarPreviewImage();
     window.deleteImageElements();
-
-    formElement.classList.add('ad-form--disabled');
 
     formTitleInputElement.value = '';
     priceInputElement.value = '';
     formDescriptionInputElement.value = '';
-
-    formElement.removeEventListener('submit', onFormSubmit);
-    formElement.removeEventListener('reset', onFormReset);
   };
 
   var doValidationForm = function () {
@@ -141,18 +143,18 @@
     timeInSelectElement.addEventListener('change', onTimeInSelectElementChange);
   };
 
-  var onFormReset = window.debounce(function () {
-    window.resetAvatarPreviewImage();
-    window.deleteImageElements();
+  var onResetFormElementClick = function (evt) {
+    evt.preventDefault();
+    doResetForm();
     doValidationForm();
     fillAddressInput();
-  });
+  };
 
   var initializationForm = function () {
     doInactiveForm(formFieldsetElements);
     doValidationForm();
     fillAddressInput();
-    formElement.addEventListener('reset', onFormReset);
+    resetFormElement.addEventListener('click', onResetFormElementClick);
   };
 
   var doActiveForm = function () {
@@ -188,6 +190,7 @@
     initializationForm: initializationForm,
     doActiveForm: doActiveForm,
     doResetForm: doResetForm,
+    doDisabledFormElements: doDisabledFormElements,
     fillAddressInput: fillAddressInput,
     doSubmitFormListener: doSubmitFormListener,
     submitDataForm: submitDataForm

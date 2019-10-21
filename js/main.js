@@ -42,6 +42,7 @@
     window.mainPin.reset();
     window.map.deletePins();
     window.form.doResetForm();
+    window.form.doDisabledFormElements();
     hideMapDialog();
     init();
   };
