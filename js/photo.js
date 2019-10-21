@@ -31,8 +31,21 @@
 
   photoInputElement.addEventListener('change', function () {
     var files = photoInputElement.files;
+    console.log(files)
 
-    for (var i = 0; i < files.length; i++) {
+    files.forEach( function(element, index) {
+      var file = element;
+      var fileName = file.name.toLowerCase();
+
+      var matches = window.variables.FILE_TYPES.some(function (it) {
+        return fileName.endsWith(it);
+      });
+
+      if (matches) {
+        getFileReader(file);
+      }
+    });
+    /*for (var i = 0; i < files.length; i++) {
       var file = files[i];
       var fileName = file.name.toLowerCase();
 
@@ -43,7 +56,7 @@
       if (matches) {
         getFileReader(file);
       }
-    }
+    }*/
   });
 
   window.deleteImageElements = deleteImageElements;

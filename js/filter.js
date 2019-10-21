@@ -106,10 +106,6 @@
     });
   };
 
-  var onCheckboxChange = window.debounce(function () {
-    updateNoticese();
-  });
-
   var unBlockFilter = function (notice) {
     loadedNotice = notice;
 
@@ -135,7 +131,7 @@
             }
           });
         }
-        onCheckboxChange();
+        window.debounce(updateNoticese);
       });
     });
   };
