@@ -3,6 +3,7 @@
 (function () {
   var LOAD_URL = 'https://js.dump.academy/keksobooking/data';
   var SAVE_URL = 'https://js.dump.academy/keksobooking/';
+  var STATUS_SUCCESS = 200;
 
   var connect = function (onLoad, onError, data) {
     var url = LOAD_URL;
@@ -17,7 +18,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === STATUS_SUCCESS) {
         onLoad(xhr.response);
       } else {
         onError(requestType, 'Статус ответа: ' + xhr.status + ' ' + xhr.statusText);

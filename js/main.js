@@ -13,7 +13,7 @@
   };
 
   var onMainPinEnterPress = function (evt) {
-    window.util.onElementEnterPress(evt, doActiveMode);
+    window.util.onElementEnterPress(evt, onPinMainElementMousedown);
   };
 
   var onLoadSuccess = function (data) {
@@ -25,14 +25,14 @@
     window.backend.load(onLoadSuccess, window.errorMessage);
   };
 
-  var doActiveMode = function () {
+  var onPinMainElementMousedown = function () {
     window.form.doActiveForm();
     window.form.doSubmitFormListener();
 
     showMapDialog();
     loadDataPin();
 
-    window.variables.pinMainElement.removeEventListener('mousedown', doActiveMode);
+    window.variables.pinMainElement.removeEventListener('mousedown', onPinMainElementMousedown);
     window.variables.pinMainElement.removeEventListener('keydown', onMainPinEnterPress);
 
     window.mainPin.init();
@@ -48,7 +48,7 @@
   };
 
   var addClickMainPinListener = function () {
-    window.variables.pinMainElement.addEventListener('mousedown', doActiveMode);
+    window.variables.pinMainElement.addEventListener('mousedown', onPinMainElementMousedown);
     window.variables.pinMainElement.addEventListener('keydown', onMainPinEnterPress);
   };
 

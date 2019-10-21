@@ -4,17 +4,17 @@
 
   var messageTemplate = document.querySelector('#success').content.querySelector('.success');
 
-  var closeSuccessElement = function () {
+  var onWindowClick = function () {
     var successElement = document.querySelector('.success');
 
     successElement.remove();
 
-    window.removeEventListener('click', closeSuccessElement);
+    window.removeEventListener('click', onWindowClick);
     window.removeEventListener('keydown', onKeydownSuccessElement);
   };
 
   var onKeydownSuccessElement = function (evt) {
-    window.util.onElementEscPress(evt, closeSuccessElement);
+    window.util.onElementEscPress(evt, onWindowClick);
   };
 
   var successMessage = function () {
@@ -24,7 +24,7 @@
 
     window.map.closePopup();
 
-    window.addEventListener('click', closeSuccessElement);
+    window.addEventListener('click', onWindowClick);
     window.addEventListener('keydown', onKeydownSuccessElement);
   };
 

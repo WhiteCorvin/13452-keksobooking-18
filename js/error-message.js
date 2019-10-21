@@ -28,7 +28,11 @@
       closeError();
     };
 
-    errorMessageCloseElement.addEventListener('click', closeError);
+    var onErrorCloseElementClick = function () {
+      closeError();
+    };
+
+    errorMessageCloseElement.addEventListener('click', onErrorCloseElementClick);
     errorMessageCloseElement.addEventListener('keydown', function (evt) {
       window.util.onElementEnterPress(evt, closeError);
     });
