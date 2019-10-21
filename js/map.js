@@ -72,9 +72,9 @@
   var deletePins = function () {
     var pins = pinListElement.querySelectorAll('[type="button"]');
 
-    for (var i = 0; i < pins.length; i++) {
-      pins[i].parentNode.removeChild(pins[i]);
-    }
+    pins.forEach(function (element) {
+      element.parentNode.removeChild(element);
+    });
 
   };
 

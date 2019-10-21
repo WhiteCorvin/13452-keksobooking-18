@@ -32,14 +32,13 @@
   var resetFormElement = formElement.querySelector('.ad-form__reset');
 
   var getSelectedElementValue = function (arr) {
-
-    for (var i = 0; i < arr.length; i++) {
-      if (arr[i].selected) {
-        return arr[i].value;
+    var value;
+    arr.forEach(function (element) {
+      if (element.selected) {
+        value = element.value;
       }
-    }
-
-    return '';
+    });
+    return value;
   };
 
   var fillAddressInput = function () {
@@ -80,12 +79,11 @@
   var syncTime = function (clickedTime, changedTime) {
     var selectedValue = getSelectedElementValue(clickedTime);
 
-    for (var i = 0; i < changedTime.length; i++) {
-      if (selectedValue === changedTime[i].value) {
-        changedTime[i].selected = true;
-        return;
+    changedTime.forEach(function (element) {
+      if (selectedValue === element.value) {
+        element.selected = true;
       }
-    }
+    });
 
   };
 
@@ -100,9 +98,9 @@
   var doInactiveForm = function () {
     window.util.doChangeDisabledElement(formHeaderFieldsetElement, true);
 
-    for (var i = 0; i < formFieldsetElements.length; i++) {
-      window.util.doChangeDisabledElement(formFieldsetElements[i], true);
-    }
+    formFieldsetElements.forEach(function (element) {
+      window.util.doChangeDisabledElement(element, true);
+    });
 
   };
 
@@ -114,13 +112,13 @@
     var formAllOptionElements = formElement.querySelectorAll('option');
     var formAllCheckboxElements = formElement.querySelectorAll('[type="checkbox"]');
 
-    for (var i = 0; i < formAllOptionElements.length; i++) {
-      formAllOptionElements[i].selected = formAllOptionElements[i].defaultSelected;
-    }
+    formAllOptionElements.forEach(function (element) {
+      element.selected = element.defaultSelected;
+    });
 
-    for (var j = 0; j < formAllCheckboxElements.length; j++) {
-      formAllCheckboxElements[j].checked = formAllCheckboxElements[j].defaultChecked;
-    }
+    formAllCheckboxElements.forEach(function (element) {
+      element.checked = element.defaultChecked;
+    });
 
     window.resetAvatarPreviewImage();
     window.deleteImageElements();
