@@ -5,6 +5,10 @@
   var avatarInputElement = document.querySelector('#avatar');
   var avatarPreviewElement = document.querySelector('.ad-form-header__preview').querySelector('img');
 
+  var resetAvatarPreviewImage = function () {
+    avatarPreviewElement.src = 'img/muffin-grey.svg';
+  };
+
   avatarInputElement.addEventListener('change', function () {
     var file = avatarInputElement.files[0];
     var fileName = file.name.toLowerCase();
@@ -24,5 +28,7 @@
     }
 
   });
+
+  window.resetAvatarPreviewImage = resetAvatarPreviewImage;
 
 })();

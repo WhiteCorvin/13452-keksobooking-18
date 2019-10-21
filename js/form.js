@@ -115,6 +115,8 @@
     for (var j = 0; j < formAllCheckboxElements.length; j++) {
       formAllCheckboxElements[j].checked = formAllCheckboxElements[j].defaultChecked;
     }
+    window.resetAvatarPreviewImage();
+    window.deleteImageElements();
 
     formElement.classList.add('ad-form--disabled');
 
@@ -123,6 +125,7 @@
     formDescriptionInputElement.value = '';
 
     formElement.removeEventListener('submit', onFormSubmit);
+    formElement.removeEventListener('reset', onFormReset);
   };
 
   var doValidationForm = function () {
@@ -138,10 +141,18 @@
     timeInSelectElement.addEventListener('change', onTimeInSelectElementChange);
   };
 
+  var onFormReset = window.debounce(function () {
+    window.resetAvatarPreviewImage();
+    window.deleteImageElements();
+    doValidationForm();
+    fillAddressInput();
+  });
+
   var initializationForm = function () {
     doInactiveForm(formFieldsetElements);
     doValidationForm();
     fillAddressInput();
+    formElement.addEventListener('reset', onFormReset);
   };
 
   var doActiveForm = function () {

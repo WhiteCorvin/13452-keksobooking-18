@@ -46,4 +46,6 @@
     }
   });
 
+  window.deleteImageElements = deleteImageElements;
+
 })();
