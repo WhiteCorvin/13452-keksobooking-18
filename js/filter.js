@@ -99,12 +99,15 @@
     updateNoticese();
   });
 
-
   var addSectionElementListener = function (section, functionChange) {
     section.addEventListener('change', function () {
       functionChange(section.value);
     });
   };
+
+  var onCheckboxChange = window.debounce(function () {
+    updateNoticese();
+  });
 
   var unBlockFilter = function (notice) {
     loadedNotice = notice;
@@ -131,7 +134,7 @@
             }
           });
         }
-        window.debounce(updateNoticese);
+        onCheckboxChange();
       });
     });
   };

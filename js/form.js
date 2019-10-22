@@ -32,13 +32,16 @@
   var resetFormElement = formElement.querySelector('.ad-form__reset');
 
   var getSelectedElementValue = function (arr) {
-    var value;
-    arr.forEach(function (element) {
+
+    var selectedElement = [].find.call(arr, function (element) {
       if (element.selected) {
-        value = element.value;
+        return true;
+      } else {
+        return false;
       }
     });
-    return value;
+
+    return selectedElement.value;
   };
 
   var fillAddressInput = function () {
@@ -79,12 +82,16 @@
   var syncTime = function (clickedTime, changedTime) {
     var selectedValue = getSelectedElementValue(clickedTime);
 
-    changedTime.forEach(function (element) {
+    [].find.call(changedTime, function (element) {
+
       if (selectedValue === element.value) {
         element.selected = true;
+        return true;
+      } else {
+        return false;
       }
-    });
 
+    });
   };
 
   var onTimeOutSelectElementChange = function () {

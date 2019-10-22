@@ -10,10 +10,10 @@
     successElement.remove();
 
     window.removeEventListener('click', onWindowClick);
-    window.removeEventListener('keydown', onKeydownSuccessElement);
+    window.removeEventListener('keydown', onWindowKeydown);
   };
 
-  var onKeydownSuccessElement = function (evt) {
+  var onWindowKeydown = function (evt) {
     window.util.onElementEscPress(evt, onWindowClick);
   };
 
@@ -23,9 +23,8 @@
     window.variables.mainElement.prepend(successElement);
 
     window.map.closePopup();
-
     window.addEventListener('click', onWindowClick);
-    window.addEventListener('keydown', onKeydownSuccessElement);
+    window.addEventListener('keydown', onWindowKeydown);
   };
 
   window.successMessage = successMessage;

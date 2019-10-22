@@ -15,8 +15,13 @@
     if (popupElement) {
       popupElement.remove();
       activePinElement.classList.remove('map__pin--active');
+      window.removeEventListener('keydown', onWindowKeydown);
     }
 
+  };
+
+  var onWindowKeydown = function (evt) {
+    window.util.onElementEscPress(evt, closePopup);
   };
 
   var addPinClickListener = function (element, data) {
@@ -32,9 +37,7 @@
         element.classList.remove('map__pin--active');
       });
 
-      window.addEventListener('keydown', function (evt) {
-        window.util.onElementEscPress(evt, closePopup);
-      });
+      window.addEventListener('keydown', onWindowKeydown);
 
     });
   };
