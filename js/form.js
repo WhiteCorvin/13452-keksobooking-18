@@ -34,11 +34,7 @@
   var getSelectedElementValue = function (arr) {
 
     var selectedElement = [].find.call(arr, function (element) {
-      if (element.selected) {
-        return true;
-      } else {
-        return false;
-      }
+      return element.selected;
     });
 
     return selectedElement.value;
